@@ -3,7 +3,7 @@ const WeatherApp = {
     
     UI: {
         cityName: null,
-        weathercode: null,
+        description: null,
         temp: null,
         searchbox: {
             input: null,
@@ -52,7 +52,7 @@ const WeatherApp = {
         
                     WeatherApp.UI.update({
                         city: forecast.city,
-                        weathercode: forecast.description,
+                        description: forecast.description,
                         temp: forecast.temperature
                     });
         
