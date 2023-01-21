@@ -8,6 +8,7 @@ const API = {
             longitude: cityData.lng,
             latitude:cityData.lat,
             temperature: fetchData.hourly.temperature_2m[0],
+            weathercode: fetchData.hourly.weathercode[0]
         }
     },
 
@@ -19,7 +20,7 @@ const API = {
                     return city.name === cityName;
                 });
         
-                fetch(API.url + `?latitude=${cityData.lat}&longitude=${cityData.lng}&hourly=temperature_2m`)
+                fetch(API.url + `?latitude=${cityData.lat}&longitude=${cityData.lng}&hourly=temperature_2m,weathercode`)
                     .then(response => response.json()).then(response => {
                         resolve(API.uniformData(cityData, response));
                     });
