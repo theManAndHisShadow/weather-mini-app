@@ -12,16 +12,16 @@ const WeatherApp = {
 
         init: function(){
             this.cityName = document.querySelector('#card__city-name');
-            this.weathercode = document.querySelector('#card__weathercode'),
+            this.description = document.querySelector('#card__description'),
             this.temp = document.querySelector('#card__temp');
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
             this.searchbox.button = document.querySelector('#searchbox button');
         }, 
 
-        update: function({city, weathercode, temp} = {}){
+        update: function({city, description, temp} = {}){
             this.cityName.innerText = city;
-            this.weathercode.innerText = weathercode;
+            this.description.innerText = description;
             this.temp.innerText = temp;
         }
     },
@@ -52,7 +52,7 @@ const WeatherApp = {
         
                     WeatherApp.UI.update({
                         city: forecast.city,
-                        weathercode: forecast.weathercode,
+                        weathercode: forecast.description,
                         temp: forecast.temperature
                     });
         
@@ -72,7 +72,7 @@ const WeatherApp = {
     
                 WeatherApp.UI.update({
                     city: forecast.city,
-                    weathercode: forecast.weathercode,
+                    description: forecast.description,
                     temp: forecast.temperature
                 });
     
@@ -85,7 +85,7 @@ const WeatherApp = {
 
             WeatherApp.UI.update({
                 city: forecast.city,
-                weathercode: forecast.weathercode,
+                description: forecast.description,
                 temp: forecast.temperature
             });
 
