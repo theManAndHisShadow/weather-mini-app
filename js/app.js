@@ -15,6 +15,7 @@ const WeatherApp = {
             this.weathercode = document.querySelector('#card__weathercode'),
             this.temp = document.querySelector('#card__temp');
             this.searchbox.input = document.querySelector('#searchbox input'),
+            this.searchbox.select = document.querySelector('#searchbox select'),
             this.searchbox.button = document.querySelector('#searchbox button');
         }, 
 
@@ -29,22 +30,44 @@ const WeatherApp = {
         document.title = WeatherApp.appName + ' - ' + text;
     },
 
-    updateUI: function(){
-
-    },
 
     init: function(){
         let defaultCity = 'City of London';
 
         WeatherApp.UI.init();
-        WeatherApp.UI.searchbox.input.addEventListener('keyup', function(){
-            let regexp = new RegExp('^' + WeatherApp.UI.searchbox.input.value, "g");
-            let result = CITIES_DATA_JSON.filter(city => {return city.name.match(regexp)})
-            console.log(result);
-        });
 
         WeatherApp.UI.searchbox.button.addEventListener('click', function(){
-            API.fetchFor(WeatherApp.UI.searchbox.input.value).then(forecast => {
+            let regexp = new RegExp('^' + WeatherApp.UI.searchbox.input.value, "g");
+            let searchResults = CITIES_DATA_JSON.filter(city => {return city.name.match(regexp)})
+            console.log(searchResults);
+            WeatherApp.UI.searchbox.select.innerHTML = "";
+            searchResults.forEach(result => {
+                WeatherApp.UI.searchbox.select.innerHTML += `<option value="${result.name}">${result.name}, ${result.country}</option>`
+            });
+
+            if(searchResults.length > 0){
+                API.fetchFor(searchResults[0].name).then(forecast => {
+
+                    WeatherApp.changeTabName(forecast.city + ', ' + forecast.country);
+        
+                    WeatherApp.UI.update({
+                        city: forecast.city,
+                        weathercode: forecast.weathercode,
+                        temp: forecast.temperature
+                    });
+        
+                    console.log(forecast);
+                })
+            }
+        });
+
+        WeatherApp.UI.searchbox.select.addEventListener('change', function(event){
+            let selectedCity = this.value;
+            console.log(selectedCity);
+
+            WeatherApp.UI.searchbox.input.value = '';
+
+            API.fetchFor(selectedCity).then(forecast => {
                 WeatherApp.changeTabName(forecast.city + ', ' + forecast.country);
     
                 WeatherApp.UI.update({
@@ -74,4 +97,3 @@ const WeatherApp = {
 document.addEventListener("DOMContentLoaded", function(){
     WeatherApp.init();
 });
-
