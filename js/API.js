@@ -1,13 +1,31 @@
 const API = {
+    // key that gives access to API
     key: "a57b2e5cfe5767864699190eee387eb7",
 
+
+
+    /**
+     * Turn all input data to unified form
+     * @param {string} rawInput for example cityName
+     * @returns same text with all low case letter
+     */
     sanitizeInput: function(rawInput){
         return rawInput.toLowerCase();
     },
 
+
+
+    // operations with location
     geo: {
         url: 'https://api.openweathermap.org/geo/1.0/direct',
-        locate: function(cityName, filterByLang = true){
+
+        /**
+         * Request location data using params
+         * @param {string} cityName Target city name
+         * @param {boolean} filterByLang (optional) Use filtering by input lang
+         * @returns .then() with access to 'locations' var.
+         */
+        locate: function(cityName, filterByLang = false){
             cityName = API.sanitizeInput(cityName);
             
             return new Promise(resolve => {
@@ -33,14 +51,28 @@ const API = {
         },
     },
 
+
+
+    // operations with weather
     weather: {
         url: 'https://api.openweathermap.org/data/2.5/weather',
+
+        // which units system must be used in requests
         units: 'metric',
+
+        /**
+         * Request current weather data using params
+         * @param {string|number} ciyLat target city latitude
+         * @param {string|number} cityLon target city longitude
+         * @returns .then() with access to 'weather' var.
+         */
         now: function(ciyLat, cityLon){
             return new Promise(resolve => {
                 fetch(`${this.url}?lat=${ciyLat}&lon=${cityLon}&limit=5&appid=${API.key}&units=${this.units}`)
                      .then(response => response.json())
                      .then(response => {
+                        
+                        // Transform to own data form 
                         resolve({
                             country: response.sys.country,
                             state: response.state,
