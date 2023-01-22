@@ -14,7 +14,7 @@ const API = {
     },
 
 
-    
+
     // operations with date
     date: {
         /**
@@ -93,7 +93,7 @@ const API = {
                         resolve({
                             country: response.sys.country,
                             state: response.state,
-                            city: response.name,
+                            city: response.name.toLowerCase(),
                             coordinates: response.coord,
                             temp: Math.round(Number(response.main.temp)),
                             temp_feels_like: Math.round(Number(response.main.feels_like)),
