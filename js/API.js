@@ -13,6 +13,8 @@ const API = {
         return rawInput.toLowerCase();
     },
 
+
+    
     // operations with date
     date: {
         /**
@@ -93,8 +95,8 @@ const API = {
                             state: response.state,
                             city: response.name,
                             coordinates: response.coord,
-                            temp: response.main.temp,
-                            temp_feels_like: response.main.feels_like,
+                            temp: Math.round(Number(response.main.temp)),
+                            temp_feels_like: Math.round(Number(response.main.feels_like)),
                             description: response.weather[0].description,
                             time: API.date.getHumanTime(response.dt), 
                         });
