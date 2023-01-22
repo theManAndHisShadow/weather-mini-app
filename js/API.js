@@ -13,6 +13,20 @@ const API = {
         return rawInput.toLowerCase();
     },
 
+    // operations with date
+    date: {
+        /**
+         * Returns time in human format
+         * @param {number} timestamp 
+         * @returns hours:minutes
+         */
+        getHumanTime: function(timestamp){
+            let date = new Date(timestamp * 1000);
+
+            return `${date.getHours()}:${date.getMinutes()}`
+        },
+    },
+
 
 
     // operations with location
@@ -71,6 +85,7 @@ const API = {
                 fetch(`${this.url}?lat=${ciyLat}&lon=${cityLon}&limit=5&appid=${API.key}&units=${this.units}`)
                      .then(response => response.json())
                      .then(response => {
+                        console.log(response);
                         
                         // Transform to own data form 
                         resolve({
@@ -81,6 +96,7 @@ const API = {
                             temp: response.main.temp,
                             temp_feels_like: response.main.feels_like,
                             description: response.weather[0].description,
+                            time: API.date.getHumanTime(response.dt), 
                         });
                      });
             });
