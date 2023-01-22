@@ -4,6 +4,12 @@ const WeatherApp = {
     data: null,
     
     UI: {
+        colors: {
+            warm: [
+                [232, 169, 50],
+                [233, 102, 28],
+            ],
+        },
         time: null,
         cityName: null,
         description: null,
@@ -26,10 +32,10 @@ const WeatherApp = {
 
         init: function(){
             this.time = document.querySelector('#card__time span');
-            this.cityName = document.querySelector('#city-name div');
-            this.description = document.querySelector('#card__description div');
+            this.cityName = document.querySelector('#city-name__text');
+            this.description = document.querySelector('#card__description__text');
             this.temp = document.querySelector('#card__temp');
-            this.temp__feels_like = document.querySelector('#card__temp-feels-like span');
+            this.temp__feels_like = document.querySelector('#card__description__feels-like span');
             this.save_location = document.querySelector('#card__save-location');
 
             this.searchbox.input = document.querySelector('#searchbox input'),
@@ -38,10 +44,13 @@ const WeatherApp = {
         }, 
 
         update: function(){
-            // this.time.innerText = WeatherApp.data.time;
+            function formatText(text){
+                return text[0].toUpperCase() + text.substring(1);
+            }
+            this.time.innerText = WeatherApp.data.time;
             this.cityName.innerText = WeatherApp.data.city;
-            this.description.innerText = WeatherApp.data.description;
-            this.temp.innerText = Number(WeatherApp.data.temp) > 0 ? "+" + WeatherApp.data.temp : WeatherApp.data.temp;
+            this.description.innerText = formatText(WeatherApp.data.description);
+            this.temp.innerText = WeatherApp.data.temp + "°";
             this.temp__feels_like.innerText = WeatherApp.data.temp_feels_like + "°";
         }
     },
