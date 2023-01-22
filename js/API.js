@@ -36,28 +36,28 @@ const API = {
         return {
             city: cityData.name,
             country: cityData.country,
-            longitude: cityData.lng,
-            latitude:cityData.lat,
+            latitude:cityData.latitude,
+            longitude: cityData.longitude,
             temperature: fetchData.hourly.temperature_2m[0],
             description: WEATHER_DATA_CODES[fetchData.hourly.weathercode[0]],
         }
     },
 
 
-    fetchFor: function(cityName){
-        if(cityName && typeof cityName === 'string' && /[a-zA-Z]+/gm.test(cityName)){
+    fetchFor: function(coordsArray){
+        if(coordsArray && Array.isArray(coordsArray)){
             return new Promise(resolve => {
                 let cityData = CITIES_DATA_JSON.find(city => {
-                    return city.name === cityName;
+                    return city.latitude == coordsArray[0] && city.longitude == coordsArray[1];
                 });
         
-                fetch(API.url + `?latitude=${cityData.lat}&longitude=${cityData.lng}&hourly=temperature_2m,weathercode`)
+                fetch(API.url + `?latitude=${coordsArray[0]}&longitude=${coordsArray[1]}&hourly=temperature_2m,weathercode`)
                     .then(response => response.json()).then(response => {
                         resolve(API.uniformData(cityData, response));
                     });
             });
         } else {
-            throw new Error('API.fetchFor: incorrect cityName argument!');
+            throw new Error('API.fetchFor: incorrect coordsArray argument!');
         }
     },
 };

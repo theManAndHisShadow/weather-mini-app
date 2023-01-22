@@ -32,7 +32,7 @@ const WeatherApp = {
 
 
     init: function(){
-        let defaultCity = 'City of London';
+        let defaultCity = [51.51279, -0.09184];
 
         WeatherApp.UI.init();
 
@@ -41,12 +41,16 @@ const WeatherApp = {
             let searchResults = CITIES_DATA_JSON.filter(city => {return city.name.match(regexp)})
             console.log(searchResults);
             WeatherApp.UI.searchbox.select.innerHTML = "";
+            console.log(searchResults);
             searchResults.forEach(result => {
-                WeatherApp.UI.searchbox.select.innerHTML += `<option value="${result.name}">${result.name}, ${result.country}</option>`
+                WeatherApp.UI.searchbox.select.innerHTML += `<option value="${result.latitude},${result.longitude}">${result.name}, ${result.country}</option>`
             });
 
             if(searchResults.length > 0){
-                API.fetchFor(searchResults[0].name).then(forecast => {
+                API.fetchFor([
+                    searchResults[0].latitude, 
+                    searchResults[0].longitude
+                ]).then(forecast => {
 
                     WeatherApp.changeTabName(forecast.city + ', ' + forecast.country);
         
@@ -62,7 +66,7 @@ const WeatherApp = {
         });
 
         WeatherApp.UI.searchbox.select.addEventListener('change', function(event){
-            let selectedCity = this.value;
+            let selectedCity = this.value.split(',');
             console.log(selectedCity);
 
             WeatherApp.UI.searchbox.input.value = '';
