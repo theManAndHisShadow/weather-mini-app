@@ -4,8 +4,8 @@ const WeatherApp = {
     data: null,
     
     UI: {
+        time: null,
         cityName: null,
-        countryName: null,
         description: null,
         temp: null,
         temp__feels_like: null,
@@ -25,18 +25,20 @@ const WeatherApp = {
         },
 
         init: function(){
-            this.countryName = document.querySelector('#country-name');
+            this.time = document.querySelector('#card__time');
             this.cityName = document.querySelector('#card__city-name');
-            this.description = document.querySelector('#card__description'),
+            this.description = document.querySelector('#card__description');
             this.temp = document.querySelector('#card__temp');
             this.temp__feels_like = document.querySelector('#card__temp-feels-like span');
-            this.save_location = document.querySelector('#card__save_location')
+            this.save_location = document.querySelector('#card__save_location');
+
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
             this.searchbox.button = document.querySelector('#searchbox button');
         }, 
 
         update: function(){
+            this.time.innerText = WeatherApp.data.time;
             this.cityName.innerText = WeatherApp.data.city + ', ' + WeatherApp.data.country;
             this.description.innerText = WeatherApp.data.description;
             this.temp.innerText = WeatherApp.data.temp + '°C';
