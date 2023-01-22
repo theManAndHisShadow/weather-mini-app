@@ -6,7 +6,7 @@ const API = {
     },
 
     geo: {
-        url: 'http://api.openweathermap.org/geo/1.0/direct',
+        url: 'https://api.openweathermap.org/geo/1.0/direct',
         locate: function(cityName, filterByLang = true){
             cityName = API.sanitizeInput(cityName);
             
