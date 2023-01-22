@@ -1,5 +1,7 @@
 const WeatherApp = {
     appName: 'Weather',
+
+    data: null,
     
     UI: {
         cityName: null,
@@ -7,6 +9,7 @@ const WeatherApp = {
         description: null,
         temp: null,
         temp__feels_like: null,
+        save_location: null,
         searchbox: {
             input: null,
             select: null,
@@ -27,16 +30,17 @@ const WeatherApp = {
             this.description = document.querySelector('#card__description'),
             this.temp = document.querySelector('#card__temp');
             this.temp__feels_like = document.querySelector('#card__temp-feels-like span');
+            this.save_location = document.querySelector('#card__save_location')
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
             this.searchbox.button = document.querySelector('#searchbox button');
         }, 
 
-        update: function({city, country, description, temp, temp_feels_like} = {}){
-            this.cityName.innerText = city + ', ' + country;
-            this.description.innerText = description;
-            this.temp.innerText = temp + '°C';
-            this.temp__feels_like.innerText = temp_feels_like + '°C';
+        update: function(){
+            this.cityName.innerText = WeatherApp.data.city + ', ' + WeatherApp.data.country;
+            this.description.innerText = WeatherApp.data.description;
+            this.temp.innerText = WeatherApp.data.temp + '°C';
+            this.temp__feels_like.innerText = WeatherApp.data.temp_feels_like + '°C';
         }
     },
 
@@ -46,9 +50,22 @@ const WeatherApp = {
 
 
     init: function(){
-        let defaultCity = {"lat":"51.5073219","lon":"-0.1276474"};
+        let defaultLocation = localStorage.getItem('defaultLocation') || '{"lon":35.9208,"lat":56.8587}';
+
+        defaultLocation = JSON.parse(defaultLocation);
 
         WeatherApp.UI.init();
+
+        API.weather.now(defaultLocation.lat, defaultLocation.lon).then(weather => {
+            WeatherApp.data = weather;
+
+            WeatherApp.changeTabName(weather.city + ', ' + weather.country);
+            WeatherApp.UI.update();
+        });
+
+        WeatherApp.UI.save_location.addEventListener('click', function(){
+            localStorage.setItem('defaultLocation', JSON.stringify(WeatherApp.data.coordinates));
+        });
 
         WeatherApp.UI.searchbox.button.addEventListener('click', function(){
             let inputValue = WeatherApp.UI.searchbox.input.value;
@@ -69,13 +86,11 @@ const WeatherApp = {
                     WeatherApp.changeTabName(locations[0].name + ', ' + locations[0].country);
                     API.weather.now(locations[0].lat, locations[0].lon).then(weather => {
                         console.log(weather);
-                        WeatherApp.UI.update({
-                            country: weather.country,
-                            city: weather.city,
-                            description: weather.description,
-                            temp: weather.temp,
-                            temp_feels_like: weather.temp_feels_like,
-                        });
+
+                        WeatherApp.data = weather;
+
+                        WeatherApp.changeTabName(weather.city + ', ' + weather.country);
+                        WeatherApp.UI.update();
                     });
                 }
             });
@@ -85,30 +100,13 @@ const WeatherApp = {
             let selectedCity = JSON.parse(this.value);
 
             API.weather.now(selectedCity.lat, selectedCity.lon).then(weather => {
-                WeatherApp.changeTabName(weather.city + ', ' + weather.country);
-
                 console.log(weather);
-                WeatherApp.UI.update({
-                    country: weather.country,
-                    city: weather.city,
-                    description: weather.description,
-                    temp: weather.temp,
-                    temp_feels_like: weather.temp_feels_like,
-                });
+
+                WeatherApp.data = weather;
+                
+                WeatherApp.changeTabName(weather.city + ', ' + weather.country);
+                WeatherApp.UI.update();
             });
-        });
-
-        API.weather.now(defaultCity.lat, defaultCity.lon).then(weather => {
-            WeatherApp.changeTabName(weather.city + ', ' + weather.country);
-
-            WeatherApp.UI.update({
-                country: weather.country,
-                city: weather.city,
-                description: weather.description,
-                temp: weather.temp,
-                temp_feels_like: weather.temp_feels_like,
-            });
-
         });
     },
 };
