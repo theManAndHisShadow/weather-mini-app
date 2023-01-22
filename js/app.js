@@ -7,7 +7,16 @@ const WeatherApp = {
         temp: null,
         searchbox: {
             input: null,
+            select: null,
             button: null,
+
+            createSelectOptions: function(country, city, latitude, longitude){
+                this.select.innerHTML += `<option value='{"lat":"${latitude}","lon":"${longitude}"}'>${city}, ${country}</option>`
+            },
+
+            clear: function(){
+                this.select.innerHTML = "";
+            },
         },
 
         init: function(){
@@ -32,69 +41,64 @@ const WeatherApp = {
 
 
     init: function(){
-        let defaultCity = [51.51279, -0.09184];
+        let defaultCity = {"lat":"51.5073219","lon":"-0.1276474"};
 
         WeatherApp.UI.init();
 
         WeatherApp.UI.searchbox.button.addEventListener('click', function(){
-            let regexp = new RegExp('^' + WeatherApp.UI.searchbox.input.value, "g");
-            let searchResults = CITIES_DATA_JSON.filter(city => {return city.name.match(regexp)})
-            console.log(searchResults);
-            WeatherApp.UI.searchbox.select.innerHTML = "";
-            console.log(searchResults);
-            searchResults.forEach(result => {
-                WeatherApp.UI.searchbox.select.innerHTML += `<option value="${result.latitude},${result.longitude}">${result.name}, ${result.country}</option>`
-            });
+            let inputValue = WeatherApp.UI.searchbox.input.value;
+            
+            API.geo.locate(inputValue).then(locations => {
+                WeatherApp.UI.searchbox.clear();
 
-            if(searchResults.length > 0){
-                API.fetchFor([
-                    searchResults[0].latitude, 
-                    searchResults[0].longitude
-                ]).then(forecast => {
+                locations.forEach(result => {
+                    WeatherApp.UI.searchbox.createSelectOptions(
+                        result.country,
+                        result.name,
+                        result.lat,
+                        result.lon
+                    )
+                });
 
-                    WeatherApp.changeTabName(forecast.city + ', ' + forecast.country);
-        
-                    WeatherApp.UI.update({
-                        city: forecast.city,
-                        description: forecast.description,
-                        temp: forecast.temperature
+                if(locations.length > 0) {
+                    WeatherApp.changeTabName(locations[0].name + ', ' + locations[0].country);
+                    API.weather.now(locations[0].lat, locations[0].lon).then(weather => {
+                        console.log(weather);
+                        WeatherApp.UI.update({
+                            city: weather.city,
+                            description: weather.description,
+                            temp: weather.temp
+                        });
                     });
-        
-                    console.log(forecast);
-                })
-            }
+                }
+            });
         });
 
         WeatherApp.UI.searchbox.select.addEventListener('change', function(event){
-            let selectedCity = this.value.split(',');
-            console.log(selectedCity);
+            let selectedCity = JSON.parse(this.value);
 
-            WeatherApp.UI.searchbox.input.value = '';
+            API.weather.now(selectedCity.lat, selectedCity.lon).then(weather => {
+                WeatherApp.changeTabName(weather.city + ', ' + weather.country);
 
-            API.fetchFor(selectedCity).then(forecast => {
-                WeatherApp.changeTabName(forecast.city + ', ' + forecast.country);
-    
+                console.log(weather);
                 WeatherApp.UI.update({
-                    city: forecast.city,
-                    description: forecast.description,
-                    temp: forecast.temperature
+                    city: weather.city,
+                    description: weather.description,
+                    temp: weather.temp
                 });
-    
-                console.log(forecast);
-            })
+            });
         });
 
-        API.fetchFor(defaultCity).then(forecast => {
-            WeatherApp.changeTabName(forecast.city + ', ' + forecast.country);
+        API.weather.now(defaultCity.lat, defaultCity.lon).then(weather => {
+            WeatherApp.changeTabName(weather.city + ', ' + weather.country);
 
             WeatherApp.UI.update({
-                city: forecast.city,
-                description: forecast.description,
-                temp: forecast.temperature
+                city: weather.city,
+                description: weather.description,
+                temp: weather.temp
             });
 
-            console.log(forecast);
-        })
+        });
     },
 };
 
