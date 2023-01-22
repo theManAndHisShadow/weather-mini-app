@@ -3,6 +3,7 @@ const WeatherApp = {
     
     UI: {
         cityName: null,
+        countryName: null,
         description: null,
         temp: null,
         temp__feels_like: null,
@@ -21,20 +22,21 @@ const WeatherApp = {
         },
 
         init: function(){
+            this.countryName = document.querySelector('#country-name');
             this.cityName = document.querySelector('#card__city-name');
             this.description = document.querySelector('#card__description'),
             this.temp = document.querySelector('#card__temp');
-            this.temp__feels_like = document.querySelector('#card__temp-feels-like');
+            this.temp__feels_like = document.querySelector('#card__temp-feels-like span');
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
             this.searchbox.button = document.querySelector('#searchbox button');
         }, 
 
-        update: function({city, description, temp, temp_feels_like} = {}){
-            this.cityName.innerText = city;
+        update: function({city, country, description, temp, temp_feels_like} = {}){
+            this.cityName.innerText = city + ', ' + country;
             this.description.innerText = description;
-            this.temp.innerText = temp;
-            this.temp__feels_like.innerText = temp_feels_like
+            this.temp.innerText = temp + '°C';
+            this.temp__feels_like.innerText = temp_feels_like + '°C';
         }
     },
 
@@ -68,6 +70,7 @@ const WeatherApp = {
                     API.weather.now(locations[0].lat, locations[0].lon).then(weather => {
                         console.log(weather);
                         WeatherApp.UI.update({
+                            country: weather.country,
                             city: weather.city,
                             description: weather.description,
                             temp: weather.temp,
@@ -86,6 +89,7 @@ const WeatherApp = {
 
                 console.log(weather);
                 WeatherApp.UI.update({
+                    country: weather.country,
                     city: weather.city,
                     description: weather.description,
                     temp: weather.temp,
@@ -98,6 +102,7 @@ const WeatherApp = {
             WeatherApp.changeTabName(weather.city + ', ' + weather.country);
 
             WeatherApp.UI.update({
+                country: weather.country,
                 city: weather.city,
                 description: weather.description,
                 temp: weather.temp,
