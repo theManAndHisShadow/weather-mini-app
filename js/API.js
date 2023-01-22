@@ -30,9 +30,12 @@ const WEATHER_DATA_CODES = {
 };
 
 const API = {
-    url: 'https://api.open-meteo.com/v1/forecast',
+    key: "a57b2e5cfe5767864699190eee387eb7",
+    tempkey: "51e7ad19ab5051dcc6db1bd66a5c3da9",
+    url: 'https://api.openweathermap.org/data/2.5/weather',
 
     uniformData: function(cityData, fetchData){
+        console.log(fetchData);
         return {
             city: cityData.name,
             country: cityData.country,
@@ -51,7 +54,7 @@ const API = {
                     return city.latitude == coordsArray[0] && city.longitude == coordsArray[1];
                 });
         
-                fetch(API.url + `?latitude=${coordsArray[0]}&longitude=${coordsArray[1]}&hourly=temperature_2m,weathercode`)
+                fetch(API.url + `?q=${'london'}&units=metric&appid=${API.tempkey}`)
                     .then(response => response.json()).then(response => {
                         resolve(API.uniformData(cityData, response));
                     });
