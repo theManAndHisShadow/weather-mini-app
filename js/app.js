@@ -25,12 +25,12 @@ const WeatherApp = {
         },
 
         init: function(){
-            this.time = document.querySelector('#card__time');
-            this.cityName = document.querySelector('#card__city-name');
-            this.description = document.querySelector('#card__description');
+            this.time = document.querySelector('#card__time span');
+            this.cityName = document.querySelector('#city-name div');
+            this.description = document.querySelector('#card__description div');
             this.temp = document.querySelector('#card__temp');
             this.temp__feels_like = document.querySelector('#card__temp-feels-like span');
-            this.save_location = document.querySelector('#card__save_location');
+            this.save_location = document.querySelector('#card__save-location');
 
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
@@ -38,11 +38,11 @@ const WeatherApp = {
         }, 
 
         update: function(){
-            this.time.innerText = WeatherApp.data.time;
-            this.cityName.innerText = WeatherApp.data.city + ', ' + WeatherApp.data.country;
+            // this.time.innerText = WeatherApp.data.time;
+            this.cityName.innerText = WeatherApp.data.city;
             this.description.innerText = WeatherApp.data.description;
-            this.temp.innerText = WeatherApp.data.temp + '°C';
-            this.temp__feels_like.innerText = WeatherApp.data.temp_feels_like + '°C';
+            this.temp.innerText = Number(WeatherApp.data.temp) > 0 ? "+" + WeatherApp.data.temp : WeatherApp.data.temp;
+            this.temp__feels_like.innerText = WeatherApp.data.temp_feels_like + "°";
         }
     },
 

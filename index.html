@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/19146be799.js" crossorigin="anonymous"></script>
+
     <link rel="stylesheet" href="css/main.css">
     <script src="js/API.js"></script>
     <script src="js/app.js"></script>
@@ -20,16 +25,29 @@
             </div>
             
             <div id="card">
-                <div id="card__time"></div>
-                <div id="card__city-name"></div>
-                <div id="card__description"></div>
-                <div id="card__temp"></div>
-                <div id="card__temp-feels-like">
-                    <div>Feels like</div><span></span>
+                <div id="card__left-side" class="side-panel">
+                    <div id="city-name">
+                        <div class="pale-info"></div>
+                        <span id="card__save-location" class="button">
+                                <i class="fa-regular fa-star accent-icon"></i>
+                        </span>
+                    </div>
+
+                    <div id="card__temp" class="accent-info"></div>
                 </div>
-                <div id="card__save_location" class="button">
-                    Save location
+
+                <div id="card__right-side"  class="side-panel">
+                    <div id="card__description" class="inline float-right">
+                        <div class="pale-info"></div>
+                        <i class="fa-solid fa-cloud accent-icon"></i>
+                    </div>
+
+                    <div id="card__temp-feels-like" class="inline float-right">
+                        <div class="pale-info">feels like</div>
+                        <span class="accent-info"></span>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>

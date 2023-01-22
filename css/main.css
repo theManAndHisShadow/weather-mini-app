@@ -1,13 +1,20 @@
 
 *{
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     margin: 0;
     padding: 0;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 #root {
     margin: 0;
     padding: 0;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: #000000cc;
 }
 
 #app {
@@ -18,11 +25,72 @@
 }
 
 #card {
-    background: silver;
-    width: 200px;
+    background: white;
+    width: 343px;
+    height: 255px;
     padding: 10px 20px;
     margin: 5px 0;
-    border-radius: 5px;
+    border-radius: 15px;
+}
+
+#card__left-side {
+    float: left;
+}
+
+#card__right-side {
+    float: right;
+}
+
+.side-panel {
+    width: 50%;
+    position: relative;
+    top: 45px;
+}
+
+#card__temp {
+    font-size: 128px;
+    font-weight: 500;
+}
+
+#card__description div {
+    width: 140px;
+    text-align: right;
+}
+
+.inline * {
+    position: relative;
+    float: left;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.inline.float-right{
+    float: right;
+    margin: 33px 0px;
+}
+
+.pale-info {
+    font-weight: 500;
+    color: gray;
+    font-family: 'Exo 2', sans-serif;
+    width: fit-content;
+    float: left;
+}
+
+.accent-info {
+    font-family: 'Roboto', sans-serif;
+    color: #262626;
+    font-weight: 500;
+    margin-left: 5px;
+    top: 1px;
+}
+
+.accent-icon {
+    color: #262626;
+    margin-left: 5px;
+    margin-top: 2px;
 }
 
 .button {
