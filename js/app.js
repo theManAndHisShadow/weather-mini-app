@@ -5,6 +5,7 @@ const WeatherApp = {
         cityName: null,
         description: null,
         temp: null,
+        temp__feels_like: null,
         searchbox: {
             input: null,
             select: null,
@@ -23,15 +24,17 @@ const WeatherApp = {
             this.cityName = document.querySelector('#card__city-name');
             this.description = document.querySelector('#card__description'),
             this.temp = document.querySelector('#card__temp');
+            this.temp__feels_like = document.querySelector('#card__temp-feels-like');
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
             this.searchbox.button = document.querySelector('#searchbox button');
         }, 
 
-        update: function({city, description, temp} = {}){
+        update: function({city, description, temp, temp_feels_like} = {}){
             this.cityName.innerText = city;
             this.description.innerText = description;
             this.temp.innerText = temp;
+            this.temp__feels_like.innerText = temp_feels_like
         }
     },
 
@@ -67,7 +70,8 @@ const WeatherApp = {
                         WeatherApp.UI.update({
                             city: weather.city,
                             description: weather.description,
-                            temp: weather.temp
+                            temp: weather.temp,
+                            temp_feels_like: weather.temp_feels_like,
                         });
                     });
                 }
@@ -84,7 +88,8 @@ const WeatherApp = {
                 WeatherApp.UI.update({
                     city: weather.city,
                     description: weather.description,
-                    temp: weather.temp
+                    temp: weather.temp,
+                    temp_feels_like: weather.temp_feels_like,
                 });
             });
         });
@@ -95,7 +100,8 @@ const WeatherApp = {
             WeatherApp.UI.update({
                 city: weather.city,
                 description: weather.description,
-                temp: weather.temp
+                temp: weather.temp,
+                temp_feels_like: weather.temp_feels_like,
             });
 
         });
