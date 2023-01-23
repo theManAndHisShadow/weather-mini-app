@@ -97,6 +97,7 @@ const API = {
                             coordinates: response.coord,
                             temp: Math.round(Number(response.main.temp)),
                             temp_feels_like: Math.round(Number(response.main.feels_like)),
+                            code: response.weather[0].id,
                             description: response.weather[0].description,
                             time: API.date.getHumanTime(response.dt), 
                         });
