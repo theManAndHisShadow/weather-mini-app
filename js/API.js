@@ -22,10 +22,16 @@ const API = {
          * @param {number} timestamp 
          * @returns hours:minutes
          */
-        getHumanTime: function(timestamp){
-            let date = new Date(timestamp * 1000);
+        getTime: function(timezone){
+            let localTime = new Date().getTime()
+            let localOffset = new Date().getTimezoneOffset() * 60000
+            let currentUtcTime = localOffset + localTime
+            let cityOffset = currentUtcTime + 1000 * timezone
+            let cityTime = new Date(cityOffset);
+            let h = cityTime.getHours();
+            let m = cityTime.getMinutes() < 10 ? "0" + cityTime.getMinutes() : cityTime.getMinutes();
 
-            return `${date.getHours()}:${date.getMinutes()}`
+            return `${h}:${m}`;
         },
     },
 
@@ -99,7 +105,7 @@ const API = {
                             temp_feels_like: Math.round(Number(response.main.feels_like)),
                             code: response.weather[0].id,
                             description: response.weather[0].description,
-                            time: API.date.getHumanTime(response.dt), 
+                            time: API.date.getTime(response.timezone), 
                         });
                      });
             });
