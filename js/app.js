@@ -54,6 +54,8 @@ const WeatherApp = {
 
             if(code == 800) {
                 classList = "clear";
+            } else if(code == 801) {
+                classList = "few-clouds";
             } else {
                 classList = "cloud"
             }
