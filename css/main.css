@@ -101,15 +101,30 @@
     padding: 10px 20px;
     margin: 5px 0;
     border-radius: 15px;
+    box-shadow: 1px 1px 40px 0px #00000069;
 
     overflow: hidden;
 }
 
-#card.night {
+#card.clear.night {
     background: #03031B;
     background: -webkit-gradient(linear, left top, left bottom, from(#03031B), to(#1E2B3D));
     background: -o-linear-gradient(top, #03031B, #1E2B3D);
     background: linear-gradient(to bottom, #03031B, #1E2B3D);
+}
+
+#card.few-clouds.night {
+    background: #03031B;
+    background: -webkit-gradient(linear, left top, left bottom, from(#03031B), to(#303d4e));
+    background: -o-linear-gradient(top, #03031B, #303d4e);
+    background: linear-gradient(to bottom, #03031B, #303d4e);
+}
+
+#card.cloud.night {
+    background: #03031B;
+    background: -webkit-gradient(linear, left top, left bottom, from(#121221), to(#424e5e));
+    background: -o-linear-gradient(top, #121221, #424e5e);
+    background: linear-gradient(to bottom, #121221, #424e5e);
 }
 
 #card.day.clear {
@@ -149,10 +164,22 @@
     background: radial-gradient(at 50% bottom, red, #0b1d44, #03031b);
 }
 
+#card.few-clouds.dawn {
+    background: #FF8A26;
+    background: -o-radial-gradient(at 50% bottom, red, #2f4167, #03031b);
+    background: radial-gradient(at 50% bottom, red, #2f4167, #03031b);
+}
+
 #card.sunset.cloud {
     background: #FF8A26;
     background: -o-radial-gradient(bottom, #FF8A26, #E0E0E0);
     background: radial-gradient(at 50% bottom, #ff8a26, #726b63, #0b1d44);
+}
+
+#card.few-clouds.sunset {
+    background: #FF8A26;
+    background: -o-radial-gradient(at 50% bottom, #fb690c, #613636, #03031b);
+    background: radial-gradient(at 50% bottom, #fb690c, #613636, #03031b);
 }
 
 #card.clear.sunset {
@@ -164,6 +191,11 @@
 #card.cloud.dawn,
 #card.cloud.sunset {
     color: black;
+}
+
+#card.cloud.dawn #car__temp,
+#card.cloud.sunset #car__temp {
+    border-right: 1px solid #00000063;
 }
 
 #card.night,
