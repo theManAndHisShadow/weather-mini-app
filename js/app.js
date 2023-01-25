@@ -1,36 +1,78 @@
 const WeatherApp = {
-    appName: 'Weather',
-
+    // Using for save last request data
     data: null,
     
+
+
+    // UI elements and own methods object
     UI: {
+        // Root node of application (html => body => #app => #root)
         root: null,
-        background: null,
+
+        // weather app node dsiplays as little card
+        card: null,
+
+        // node with local time
         time: null,
+
+        // node with city name
         cityName: null,
+
+        // node with weather descr.
         description: null,
+
+        // node with current temperature
         temp: null,
         temp__feels_like: null,
+
+        // node with button 'save location'
         save_location: null,
+
+        // weather icon (rain, sun, cloud etc.)
         icon: null,
+
+        // searchbox object
         searchbox: {
+            // here user input city name
             input: null,
+
+            // searching by city name returns options... 
+            // ...for this select node
             select: null,
+
+            // node to start search action
             button: null,
 
+            /**
+             * Fills 'selec't node with 'option' nodes
+             * @param {string} country 
+             * @param {string} city 
+             * @param {number|string} latitude 
+             * @param {number|string} longitude 
+             */
             createSelectOptions: function(country, city, latitude, longitude){
                 this.select.innerHTML += `<option value='{"lat":"${latitude}","lon":"${longitude}"}'>${city}, ${country}</option>`
             },
 
+
+
+            /**
+             * Clear input field
+             */
             clear: function(){
                 this.select.innerHTML = "";
             },
         },
 
 
+
+        // Animated spinner element
         spinner: {
             node: null,
 
+            /**
+             * Hide spinner node only once
+             */
             hideOnce: function(){
                 if(!this.node.classList.contains('transparent')){
                     setTimeout(() => {
@@ -40,26 +82,40 @@ const WeatherApp = {
             },
         },
 
-        init: function(){
-            this.root = document.querySelector('#root');
-            this.background = document.querySelector('#card');
-            this.time = document.querySelector('#card__time span');
-            this.cityName = document.querySelector('#city-name__text');
-            this.description = document.querySelector('#card__description__text');
-            this.temp = document.querySelector('#card__temp');
-            this.temp__feels_like = document.querySelector('#card__description__feels-like span');
-            this.save_location = document.querySelector('#card__save-location');
-            this.icon = document.querySelector("#weather-icon span");
-            this.spinner.node = document.querySelector('#loading-spinner')
 
+
+        /**
+         * Initialize UI node props
+         */
+        init: function(){
+            // basement
+            this.root = document.querySelector('#root');
+            this.spinner.node = document.querySelector('#loading-spinner');
+            this.card = document.querySelector('#card');
+
+            // searchbox
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
             this.searchbox.button = document.querySelector('#searchbox label span');
+
+            // card
+            this.time = document.querySelector('#card__time span');
+            this.save_location = document.querySelector('#card__save-location');
+            this.cityName = document.querySelector('#city-name__text');
+            this.icon = document.querySelector("#weather-icon span");
+            this.description = document.querySelector('#card__description__text');
+            this.temp = document.querySelector('#card__temp');
+            this.temp__feels_like = document.querySelector('#card__description__feels-like span');
         }, 
         
+
+
+        /**
+         * App colors changing by weather data and local time
+         */
         changeColors(){
             let root = WeatherApp.UI.root;
-            let background = WeatherApp.UI.background;
+            let background = WeatherApp.UI.card;
             let time = Number(WeatherApp.data.time.split(':')[0]);
             let t = WeatherApp.data.temp;
             let code = WeatherApp.data.code;
@@ -88,6 +144,11 @@ const WeatherApp = {
             background.classList = classList;
         },
 
+
+
+        /**
+         * Change 'save location' button visibility using WeatherApp.getDefaultLocation() result
+         */
         showOrHideSaveLocation: function(){
             let currentLocation = WeatherApp.data.coordinates;
             let defaultLocation = WeatherApp.getDefaultLocation();
@@ -102,11 +163,17 @@ const WeatherApp = {
             }
         },
         
+
+
+        /**
+         * Change weather icon by weather data and time
+         */
         changeWeatherIcon: function(){
             let icon;
             let time = Number(WeatherApp.data.time.split(':')[0]);
             let code = WeatherApp.data.code;
 
+            // if day
             if(time > 5 && time < 20) {
                 switch(code){
                     case 800:
@@ -123,6 +190,7 @@ const WeatherApp = {
                         icon = "filter_drama";
                         break;
                 }
+            // if night
             } else if (time >= 20 || (time >= 0 && time <= 5)){
                 switch(code){
                     case 800:
@@ -141,7 +209,7 @@ const WeatherApp = {
                 }
             } 
 
-            // rain
+            // Not depends by local time
             if
             ((code >= 300 && code <= 321) || (code >= 500 && code <= 531)){
                 icon = "rainy";
@@ -158,11 +226,17 @@ const WeatherApp = {
             this.icon.innerText = icon;
         },
 
+
+
+        /**
+         * Rendering the user interface using the current data. 
+         * All UI mutations happens here!
+         */
         update: function(){
+            // helper function should not be here ;)
             function formatText(text){
                 return text[0].toUpperCase() + text.substring(1);
             }
-
 
             WeatherApp.UI.spinner.hideOnce();
             WeatherApp.UI.showOrHideSaveLocation();
@@ -177,25 +251,53 @@ const WeatherApp = {
         }
     },
 
+
+
+    /**
+     * Get saved data about default location
+     * @returns Object with default location latitude and longitude
+     */
     getDefaultLocation(){
         return JSON.parse(localStorage.getItem('defaultLocation'));
     },
 
+
+
+    /**
+     * Upodate browser tab title
+     * @param {string} text 
+     */
     changeTabName: function(text){
         document.title = WeatherApp.appName + ' - ' + text;
     },
 
 
+
+    /**
+     * Get and update weather for some city
+     * @param {string|number} lat target city latitude
+     * @param {string|number} lon target city longitude
+     */
     updateFor: function(lat, lon){
         API.weather.now(lat, lon).then(weather => {
             console.log(weather);
 
+            // save new weather data
             WeatherApp.data = weather;
+
+            // update tab name
             WeatherApp.changeTabName(weather.city + ', ' + weather.country);
+
+            // render all UI
             WeatherApp.UI.update();
         });
     },
 
+
+
+    /**
+     * Get user search value, find city and if successful - update UI with new data
+     */
     locateAndUpdate: function(){
         let inputValue = WeatherApp.UI.searchbox.input.value;
             
@@ -211,24 +313,31 @@ const WeatherApp = {
                     );
                 });
 
+                // if we result > 0, render data for first location
                 if(locations.length > 0) {
                     WeatherApp.changeTabName(locations[0].name + ', ' + locations[0].country);
-
-                    // default action when locations finded...
-                    // ...show weather for first location
                     WeatherApp.updateFor(locations[0].lat, locations[0].lon);
 
+                    // NB: this only UI mutation outside WeatherApp.UI.update
+                    // unhide select elemen, if locations array length > 0
                     WeatherApp.UI.searchbox.select.removeAttribute('hidden');
                 } else {
+                    // NB: this only UI mutation outside WeatherApp.UI.update
+                    // unhide select elemen, if locations array length =< 0
                     WeatherApp.UI.searchbox.select.setAttribute('hidden', '');
                 }
             });
     },
 
 
+
+    /**
+     * Initialize entire application
+     */
     init: function(){
         WeatherApp.UI.init();
         
+        // show weather fo default location
         let defaultLocation = 
                 WeatherApp.getDefaultLocation()
                 || '{"lon":35.9208,"lat":56.8587}';
@@ -257,6 +366,9 @@ const WeatherApp = {
 
     },
 };
+
+
+
 
 document.addEventListener("DOMContentLoaded", function(){
     WeatherApp.init();
