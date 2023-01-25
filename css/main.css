@@ -102,7 +102,7 @@
 #loading-spinner.transparent{
     opacity: 0;
     z-index: -99;
-    transition: 0.3s ease;
+    transition: 0.7s ease;
 }
 
 /* origin: https://loading.io/css/ */
