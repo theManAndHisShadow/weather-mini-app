@@ -27,6 +27,17 @@ const WeatherApp = {
             },
         },
 
+
+        spinner: {
+            node: null,
+
+            hideOnce: function(){
+                if(!this.node.classList.contains('transparent')){
+                    this.node.classList.add('transparent');
+                }
+            },
+        },
+
         init: function(){
             this.root = document.querySelector('#root');
             this.background = document.querySelector('#card');
@@ -37,6 +48,7 @@ const WeatherApp = {
             this.temp__feels_like = document.querySelector('#card__description__feels-like span');
             this.save_location = document.querySelector('#card__save-location');
             this.icon = document.querySelector("#weather-icon span");
+            this.spinner.node = document.querySelector('#loading-spinner')
 
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
@@ -79,6 +91,9 @@ const WeatherApp = {
                 return text[0].toUpperCase() + text.substring(1);
             }
 
+            
+            WeatherApp.UI.spinner.hideOnce();
+            
             let currentLocation = WeatherApp.data.coordinates;
             let defaultLocation = WeatherApp.getDefaultLocation();
             if(
