@@ -308,6 +308,7 @@ const WeatherApp = {
     locateAndUpdate: function(){
         let inputValue = WeatherApp.UI.searchbox.input.value;
             
+        if(inputValue.length > 0) {
             API.geo.locate(inputValue).then(locations => {
                 WeatherApp.UI.searchbox.clear();
 
@@ -334,6 +335,7 @@ const WeatherApp = {
                     WeatherApp.UI.searchbox.select.setAttribute('hidden', '');
                 }
             });
+        }
     },
 
 
