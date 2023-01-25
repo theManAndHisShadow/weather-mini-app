@@ -148,6 +148,15 @@ const WeatherApp = {
     },
 
 
+    update: function(weather){
+        console.log(weather);
+
+        WeatherApp.data = weather;
+        WeatherApp.changeTabName(weather.city + ', ' + weather.country);
+        WeatherApp.UI.update();
+    },
+
+
     init: function(){
         let defaultLocation = localStorage.getItem('defaultLocation') || '{"lon":35.9208,"lat":56.8587}';
 
@@ -156,10 +165,7 @@ const WeatherApp = {
         WeatherApp.UI.init();
 
         API.weather.now(defaultLocation.lat, defaultLocation.lon).then(weather => {
-            WeatherApp.data = weather;
-
-            WeatherApp.changeTabName(weather.city + ', ' + weather.country);
-            WeatherApp.UI.update();
+            WeatherApp.update(weather);
         });
 
         WeatherApp.UI.save_location.addEventListener('click', function(){
@@ -178,18 +184,13 @@ const WeatherApp = {
                         result.name,
                         result.lat,
                         result.lon
-                    )
+                    );
                 });
 
                 if(locations.length > 0) {
                     WeatherApp.changeTabName(locations[0].name + ', ' + locations[0].country);
                     API.weather.now(locations[0].lat, locations[0].lon).then(weather => {
-                        console.log(weather);
-
-                        WeatherApp.data = weather;
-
-                        WeatherApp.changeTabName(weather.city + ', ' + weather.country);
-                        WeatherApp.UI.update();
+                        WeatherApp.update(weather);
                     });
                 }
             });
@@ -199,12 +200,7 @@ const WeatherApp = {
             let selectedCity = JSON.parse(this.value);
 
             API.weather.now(selectedCity.lat, selectedCity.lon).then(weather => {
-                console.log(weather);
-
-                WeatherApp.data = weather;
-                
-                WeatherApp.changeTabName(weather.city + ', ' + weather.country);
-                WeatherApp.UI.update();
+                WeatherApp.update(weather);
             });
         });
     },
