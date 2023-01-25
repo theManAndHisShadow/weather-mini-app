@@ -93,8 +93,6 @@ const API = {
                 fetch(`${this.url}?lat=${ciyLat}&lon=${cityLon}&limit=5&appid=${API.key}&units=${this.units}`)
                      .then(response => response.json())
                      .then(response => {
-                        console.log(response);
-                        
                         // Transform to own data form 
                         resolve({
                             country: response.sys.country,
