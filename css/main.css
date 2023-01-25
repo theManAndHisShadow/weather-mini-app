@@ -61,7 +61,8 @@
 }
 
 
-#root.day.clear {
+#root.clear.day,
+#root.few-clouds.day {
     background: #a4ddf5;
 }
 
@@ -81,17 +82,51 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50.4%);
     font-family: 'Roboto', sans-serif;
 }
 
 
 #searchbox {
-    opacity: 0.1;
+    position: relative;
+    bottom: 10px;
 }
 
-#searchbox:hover,
-#searchbox:active {
+#searchbox input {
+    background: none;
+    border: none;
+}
+
+#searchbox input:active,
+#searchbox input:focus {
+    outline: none;
+}
+
+#searchbox label,
+#searchbox select {
+    padding: 4px 5px;
+    border-radius: 5px;
+    border: 1px solid #686868;
+    background: #ffffffb0;
+    position: relative;
+}
+
+#searchbox select {
+    bottom: 1px;
+}
+
+#searchbox span {
+    border: 1px solid #3c3c3c;
+    border-radius: 4px;
+    padding: 1px 2px;
+    opacity: 0.5;
+    font-size: 16px;
+    position: relative;
+    cursor: pointer;
+    top: 2px;
+}
+
+#searchbox span:hover {
     opacity: 1;
 }
 
@@ -193,8 +228,9 @@
     color: black;
 }
 
-#card.cloud.dawn #car__temp,
-#card.cloud.sunset #car__temp {
+#card.few-clouds.day #card__temp,
+#card.cloud.dawn #card__temp,
+#card.cloud.sunset #card__temp {
     border-right: 1px solid #00000063;
 }
 

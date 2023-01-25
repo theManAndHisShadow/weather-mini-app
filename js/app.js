@@ -40,7 +40,7 @@ const WeatherApp = {
 
             this.searchbox.input = document.querySelector('#searchbox input'),
             this.searchbox.select = document.querySelector('#searchbox select'),
-            this.searchbox.button = document.querySelector('#searchbox button');
+            this.searchbox.button = document.querySelector('#searchbox label span');
         }, 
         
         dynamicBackground(){
