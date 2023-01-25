@@ -33,7 +33,9 @@ const WeatherApp = {
 
             hideOnce: function(){
                 if(!this.node.classList.contains('transparent')){
-                    this.node.classList.add('transparent');
+                    setTimeout(() => {
+                        this.node.classList.add('transparent');
+                    }, 350)
                 }
             },
         },
@@ -91,7 +93,7 @@ const WeatherApp = {
                 return text[0].toUpperCase() + text.substring(1);
             }
 
-            
+
             WeatherApp.UI.spinner.hideOnce();
             
             let currentLocation = WeatherApp.data.coordinates;
