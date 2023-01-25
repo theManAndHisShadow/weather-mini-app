@@ -79,6 +79,18 @@ const WeatherApp = {
                 return text[0].toUpperCase() + text.substring(1);
             }
 
+            let currentLocation = WeatherApp.data.coordinates;
+            let defaultLocation = WeatherApp.getDefaultLocation();
+            if(
+                (currentLocation.lat === defaultLocation.lat) 
+                && 
+                (currentLocation.lon === currentLocation.lon)
+            ) {
+                WeatherApp.UI.save_location.classList.remove('opacity-low');
+            } else {
+                WeatherApp.UI.save_location.classList.add('opacity-low');
+            }
+
             this.dynamicBackground();
 
             this.time.innerText = WeatherApp.data.time;
@@ -143,6 +155,10 @@ const WeatherApp = {
         }
     },
 
+    getDefaultLocation(){
+        return JSON.parse(localStorage.getItem('defaultLocation'));
+    },
+
     changeTabName: function(text){
         document.title = WeatherApp.appName + ' - ' + text;
     },
@@ -192,13 +208,14 @@ const WeatherApp = {
         WeatherApp.UI.init();
         
         let defaultLocation = 
-                JSON.parse(localStorage.getItem('defaultLocation'))
+                WeatherApp.getDefaultLocation()
                 || '{"lon":35.9208,"lat":56.8587}';
 
         WeatherApp.updateFor(defaultLocation.lat, defaultLocation.lon);
 
         WeatherApp.UI.save_location.addEventListener('click', function(){
             localStorage.setItem('defaultLocation', JSON.stringify(WeatherApp.data.coordinates));
+            this.classList.remove('opacity-low');
         });
 
         WeatherApp.UI.searchbox.button.addEventListener('click', function(){
