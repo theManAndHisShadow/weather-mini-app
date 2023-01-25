@@ -1,4 +1,9 @@
 const WeatherApp = {
+    appName: "Weather Mini App",
+
+    // show or hide request result in console
+    debug: false,
+
     // Using for save last request data
     data: null,
     
@@ -280,7 +285,9 @@ const WeatherApp = {
      */
     updateFor: function(lat, lon){
         API.weather.now(lat, lon).then(weather => {
-            console.log(weather);
+            if(WeatherApp.debug){
+                console.log(weather);
+            }
 
             // save new weather data
             WeatherApp.data = weather;
@@ -332,9 +339,11 @@ const WeatherApp = {
 
 
     /**
+     *   
      * Initialize entire application
+     * @param {*} param0 Show request results in console
      */
-    init: function(){
+    init: function({debug = false} = {}){
         WeatherApp.UI.init();
         
         // show weather fo default location
@@ -371,5 +380,5 @@ const WeatherApp = {
 
 
 document.addEventListener("DOMContentLoaded", function(){
-    WeatherApp.init();
+    WeatherApp.init({debug: true});
 });
