@@ -148,32 +148,18 @@ const WeatherApp = {
     },
 
 
-    update: function(weather){
-        console.log(weather);
+    updateFor: function(lat, lon){
+        API.weather.now(lat, lon).then(weather => {
+            console.log(weather);
 
-        WeatherApp.data = weather;
-        WeatherApp.changeTabName(weather.city + ', ' + weather.country);
-        WeatherApp.UI.update();
+            WeatherApp.data = weather;
+            WeatherApp.changeTabName(weather.city + ', ' + weather.country);
+            WeatherApp.UI.update();
+        });
     },
 
-
-    init: function(){
-        let defaultLocation = localStorage.getItem('defaultLocation') || '{"lon":35.9208,"lat":56.8587}';
-
-        defaultLocation = JSON.parse(defaultLocation);
-
-        WeatherApp.UI.init();
-
-        API.weather.now(defaultLocation.lat, defaultLocation.lon).then(weather => {
-            WeatherApp.update(weather);
-        });
-
-        WeatherApp.UI.save_location.addEventListener('click', function(){
-            localStorage.setItem('defaultLocation', JSON.stringify(WeatherApp.data.coordinates));
-        });
-
-        WeatherApp.UI.searchbox.button.addEventListener('click', function(){
-            let inputValue = WeatherApp.UI.searchbox.input.value;
+    locateAndUpdate: function(){
+        let inputValue = WeatherApp.UI.searchbox.input.value;
             
             API.geo.locate(inputValue).then(locations => {
                 WeatherApp.UI.searchbox.clear();
@@ -189,20 +175,47 @@ const WeatherApp = {
 
                 if(locations.length > 0) {
                     WeatherApp.changeTabName(locations[0].name + ', ' + locations[0].country);
-                    API.weather.now(locations[0].lat, locations[0].lon).then(weather => {
-                        WeatherApp.update(weather);
-                    });
+
+                    // default action when locations finded...
+                    // ...show weather for first location
+                    WeatherApp.updateFor(locations[0].lat, locations[0].lon);
+
+                    WeatherApp.UI.searchbox.select.removeAttribute('hidden');
+                } else {
+                    WeatherApp.UI.searchbox.select.setAttribute('hidden', '');
                 }
             });
+    },
+
+
+    init: function(){
+        WeatherApp.UI.init();
+        
+        let defaultLocation = 
+                JSON.parse(localStorage.getItem('defaultLocation'))
+                || '{"lon":35.9208,"lat":56.8587}';
+
+        WeatherApp.updateFor(defaultLocation.lat, defaultLocation.lon);
+
+        WeatherApp.UI.save_location.addEventListener('click', function(){
+            localStorage.setItem('defaultLocation', JSON.stringify(WeatherApp.data.coordinates));
         });
 
-        WeatherApp.UI.searchbox.select.addEventListener('change', function(event){
-            let selectedCity = JSON.parse(this.value);
-
-            API.weather.now(selectedCity.lat, selectedCity.lon).then(weather => {
-                WeatherApp.update(weather);
-            });
+        WeatherApp.UI.searchbox.button.addEventListener('click', function(){
+            WeatherApp.locateAndUpdate();
         });
+
+        WeatherApp.UI.searchbox.input.addEventListener('keydown', function(event){
+            if(event.key == "Enter"){
+                WeatherApp.locateAndUpdate();
+            }
+        });
+
+        WeatherApp.UI.searchbox.select.addEventListener('change', function(){
+            let selectedCity = JSON.parse(WeatherApp.UI.searchbox.select.value);
+            WeatherApp.updateFor(selectedCity.lat, selectedCity.lon);
+        });
+
     },
 };
 
