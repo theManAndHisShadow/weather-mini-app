@@ -57,7 +57,7 @@ const WeatherApp = {
             this.searchbox.button = document.querySelector('#searchbox label span');
         }, 
         
-        dynamicBackground(){
+        changeColors(){
             let root = WeatherApp.UI.root;
             let background = WeatherApp.UI.background;
             let time = Number(WeatherApp.data.time.split(':')[0]);
@@ -88,14 +88,7 @@ const WeatherApp = {
             background.classList = classList;
         },
 
-        update: function(){
-            function formatText(text){
-                return text[0].toUpperCase() + text.substring(1);
-            }
-
-
-            WeatherApp.UI.spinner.hideOnce();
-            
+        showOrHideSaveLocation: function(){
             let currentLocation = WeatherApp.data.coordinates;
             let defaultLocation = WeatherApp.getDefaultLocation();
             if(
@@ -107,15 +100,9 @@ const WeatherApp = {
             } else {
                 WeatherApp.UI.save_location.classList.add('opacity-low');
             }
-
-            this.dynamicBackground();
-
-            this.time.innerText = WeatherApp.data.time;
-            this.cityName.innerText = WeatherApp.data.city;
-            this.description.innerText = formatText(WeatherApp.data.description);
-            this.temp.innerText = WeatherApp.data.temp + "°";
-            this.temp__feels_like.innerText = WeatherApp.data.temp_feels_like + "°";
-
+        },
+        
+        changeWeatherIcon: function(){
             let icon;
             let time = Number(WeatherApp.data.time.split(':')[0]);
             let code = WeatherApp.data.code;
@@ -169,6 +156,24 @@ const WeatherApp = {
             } 
 
             this.icon.innerText = icon;
+        },
+
+        update: function(){
+            function formatText(text){
+                return text[0].toUpperCase() + text.substring(1);
+            }
+
+
+            WeatherApp.UI.spinner.hideOnce();
+            WeatherApp.UI.showOrHideSaveLocation();
+            WeatherApp.UI.changeColors();
+            WeatherApp.UI.changeWeatherIcon();
+
+            this.time.innerText = WeatherApp.data.time;
+            this.cityName.innerText = WeatherApp.data.city;
+            this.description.innerText = formatText(WeatherApp.data.description);
+            this.temp.innerText = WeatherApp.data.temp + "°";
+            this.temp__feels_like.innerText = WeatherApp.data.temp_feels_like + "°";
         }
     },
 
