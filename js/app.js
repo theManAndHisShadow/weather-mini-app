@@ -267,7 +267,7 @@ const WeatherApp = {
 
         if(localStorage.getItem('defaultLocation')){
             location = JSON.parse(localStorage.getItem('defaultLocation'));
-        } else location = {lon:35.9208,lat:56.8587};
+        } else location = {lon: 139.7595, lat: 35.6828};
 
         return location;
     },
