@@ -263,7 +263,13 @@ const WeatherApp = {
      * @returns Object with default location latitude and longitude
      */
     getDefaultLocation(){
-        return JSON.parse(localStorage.getItem('defaultLocation'));
+        let location;
+
+        if(localStorage.getItem('defaultLocation')){
+            location = JSON.parse(localStorage.getItem('defaultLocation'));
+        } else location = {lon:35.9208,lat:56.8587};
+
+        return location;
     },
 
 
@@ -349,10 +355,7 @@ const WeatherApp = {
         WeatherApp.UI.init();
         
         // show weather fo default location
-        let defaultLocation = 
-                WeatherApp.getDefaultLocation()
-                || '{"lon":35.9208,"lat":56.8587}';
-
+        let defaultLocation = WeatherApp.getDefaultLocation();
         WeatherApp.updateFor(defaultLocation.lat, defaultLocation.lon);
 
         WeatherApp.UI.save_location.addEventListener('click', function(){
