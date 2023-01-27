@@ -352,6 +352,7 @@ const WeatherApp = {
      * @param {*} param0 Show request results in console
      */
     init: function({debug = false} = {}){
+        WeatherApp.debug = debug;
         WeatherApp.UI.init();
         
         // show weather fo default location
